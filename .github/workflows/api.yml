@@ -1,0 +1,16 @@
+name: Fetch Weather Info
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  fetch_weather:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Отримати інформацію про погоду для Києва
+        run: |
+          echo "Запит до wttr.in для отримання погоди в Києві:"
+          curl -s wttr.in/Kyiv?format=3
