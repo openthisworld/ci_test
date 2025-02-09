@@ -7,5 +7,5 @@ ARG BUILD_DATE
 # Створюємо файл, де записуємо інформацію про дату білду
 RUN echo "Імедж побудовано: ${BUILD_DATE}" > /build-info.txt
 
-# При запуску контейнера виводимо зміст файлу build-info.txt
+# При запуску контейнера виводимо зміст файлу build-info.txt!
 CMD ["cat", "/build-info.txt"]
