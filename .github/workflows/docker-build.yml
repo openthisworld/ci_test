@@ -1,0 +1,38 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Налаштовуємо змінні, які використовуватимуться в workflow
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      IMAGE_NAME: my-docker-image_ci_test
+      TAG: ${{ github.sha }}
+
+    steps:
+      - name: Checkout репозиторію
+        uses: actions/checkout@v3
+
+      - name: Вхід в Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Побудова Docker імеджу
+        run: |
+          echo "Починаємо побудову Docker імеджу..."
+          docker build \
+            --build-arg BUILD_DATE="$(date '+%Y-%m-%d %H:%M:%S')" \
+            -t $DOCKERHUB_USERNAME/$IMAGE_NAME:$TAG .
+
+      - name: Завантаження Docker імеджу в Docker Hub
+        run: |
+          echo "Завантаження імеджу до Docker Hub..."
+          docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:$TAG
